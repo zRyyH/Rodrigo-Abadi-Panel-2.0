@@ -1,0 +1,32 @@
+import { Button } from '@/components/ui/button';
+import { Loader2, Save, Plus } from 'lucide-react';
+
+export const EditActions = ({ isSubmitting, onSubmit, disabled, mode = 'edit' }) => {
+    const isCreateMode = mode === 'create';
+
+    return (
+        <div className="flex gap-3 mt-6 pt-6 border-t">
+            <Button
+                onClick={onSubmit}
+                disabled={isSubmitting || disabled}
+                className="flex-1"
+            >
+                {isSubmitting ? (
+                    <>
+                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                        {isCreateMode ? 'Criando...' : 'Salvando...'}
+                    </>
+                ) : (
+                    <>
+                        {isCreateMode ? (
+                            <Plus className="h-4 w-4 mr-2" />
+                        ) : (
+                            <Save className="h-4 w-4 mr-2" />
+                        )}
+                        {isCreateMode ? 'Criar Item' : 'Salvar Alterações'}
+                    </>
+                )}
+            </Button>
+        </div>
+    );
+};
