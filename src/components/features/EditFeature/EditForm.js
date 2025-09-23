@@ -1,5 +1,5 @@
 import { Card, CardContent } from '@/components/ui/card';
-import DynamicForm from '@/components/common/DynamicForm';
+import Form from '@/components/common/DynamicForm';
 import { EditHeader } from './EditHeader';
 import { EditActions } from './EditActions';
 import { useMemo } from 'react';
@@ -60,7 +60,7 @@ export const EditForm = ({
             <Card>
                 <EditHeader title={title} onBack={onBack} />
                 <CardContent>
-                    <DynamicForm
+                    <Form
                         fields={fields}
                         defaultValues={safeFormData}
                         onChange={onFormChange}
