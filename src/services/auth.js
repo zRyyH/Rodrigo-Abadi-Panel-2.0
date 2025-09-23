@@ -16,7 +16,6 @@ export const authService = {
     },
 
     async logout() {
-        await httpClient.post('auth/logout');
         removeToken();
     },
 
