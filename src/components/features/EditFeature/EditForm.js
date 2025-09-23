@@ -1,5 +1,5 @@
 import { Card, CardContent } from '@/components/ui/card';
-import Form from '@/components/common/Form';
+import DynamicForm from '@/components/common/DynamicForm'; // Mudança aqui
 import { EditHeader } from './EditHeader';
 import { EditActions } from './EditActions';
 import { useMemo } from 'react';
@@ -22,24 +22,22 @@ export const EditForm = ({
 
         // Para cada campo definido, garantir que há um valor inicial
         fields.forEach(field => {
-            const fieldName = field.name || field.key;
+            const fieldName = field.name;
             if (fieldName && !(fieldName in safeData)) {
                 // Definir valor padrão baseado no tipo do campo
                 switch (field.type) {
                     case 'number':
                         safeData[fieldName] = 0;
                         break;
-                    case 'boolean':
                     case 'checkbox':
+                    case 'switch':
                         safeData[fieldName] = false;
                         break;
                     case 'select':
-                    case 'multiselect':
-                        safeData[fieldName] = field.multiple ? [] : '';
-                        break;
-                    case 'date':
-                    case 'datetime':
                         safeData[fieldName] = '';
+                        break;
+                    case 'file':
+                        safeData[fieldName] = null;
                         break;
                     case 'textarea':
                     case 'text':
@@ -60,10 +58,15 @@ export const EditForm = ({
             <Card>
                 <EditHeader title={title} onBack={onBack} />
                 <CardContent>
-                    <Form
+                    <DynamicForm
                         fields={fields}
-                        defaultValues={safeFormData}
-                        onChange={onFormChange}
+                        values={safeFormData}
+                        onFieldChange={(fieldName, newValue) => {
+                            onFormChange({
+                                ...safeFormData,
+                                [fieldName]: newValue
+                            });
+                        }}
                         className="space-y-6"
                     />
                     <EditActions
