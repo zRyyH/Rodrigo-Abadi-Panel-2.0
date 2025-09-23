@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -19,7 +19,6 @@ export const SelectField = ({ field, formField, editable }) => {
         }
     }, [field.collection, field.optionLabel]);
 
-    // Se tem collection definida, usa os dados do CRUD
     const options = field.collection && field.optionLabel
         ? items.map(item => ({
             value: item[field.optionValue || 'id'],

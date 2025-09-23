@@ -73,8 +73,6 @@ const useDirectusTable = (collection, config = {}) => {
             }
 
             const result = await service.readItems(options);
-
-            console.log("useDirectusTable:", result, options)
             
             setData(result.data.data || result);
             setMeta(result.data.meta || null);
