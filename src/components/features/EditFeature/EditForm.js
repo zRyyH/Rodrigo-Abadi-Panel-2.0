@@ -1,5 +1,5 @@
 import { Card, CardContent } from '@/components/ui/card';
-import Form from '@/components/common/DynamicForm';
+import Form from '@/components/common/Form';
 import { EditHeader } from './EditHeader';
 import { EditActions } from './EditActions';
 import { useMemo } from 'react';
