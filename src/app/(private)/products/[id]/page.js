@@ -8,6 +8,7 @@ export default function ProductDetails() {
         <EditFeature
             collection="products"
             fields={PRODUCTS_CONFIG.fields}
+            options={PRODUCTS_CONFIG.queryId}
             title="Editar Produto"
             redirectPath="/products"
             queryOptions={{ fields: ['*'] }}

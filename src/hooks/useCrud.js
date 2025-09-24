@@ -1,78 +1,77 @@
 import { useState } from 'react';
-import { useNotification } from '@/hooks/useNotification';
 import DirectusBaseService from '@/services/base';
+import { useAsyncRequest } from './useAsyncRequest';
 
 export const useCrud = (collection) => {
-    const [state, setState] = useState({
-        item: null,
-        items: [],
-        meta: null,
-        loading: false,
-        error: null
-    });
+    const [item, setItem] = useState(null);
+    const [items, setItems] = useState([]);
+    const [meta, setMeta] = useState(null);
+    const [uploadedFiles, setUploadedFiles] = useState([]);
 
-    const { showError } = useNotification();
     const service = new DirectusBaseService(collection);
+    const { loading, error, run, clearError } = useAsyncRequest();
 
-    const executeRequest = async (requestFn, operation = 'Operação') => {
-        setState(prev => ({ ...prev, loading: true, error: null }));
-
-        try {
-            const result = await requestFn();
-            setState(prev => ({ ...prev, loading: false }));
-            return result;
-        } catch (err) {
-            const errorMessage = err.response?.data?.message || err.message;
-
-            setState(prev => ({
-                ...prev,
-                loading: false,
-                error: errorMessage
-            }));
-
-            showError(`Erro na ${operation}`, errorMessage);
-            throw err;
-        }
-    };
-
-    const api = {
-        read: (id, options = {}) => executeRequest(async () => {
-            const response = await service.readItem(id, options);
-            const data = response.data.data;
-            setState(prev => ({ ...prev, item: data }));
+    const read = (id, options = {}) =>
+        run(async () => {
+            const res = await service.readItem(id, options);
+            const data = res.data.data;
+            setItem(data);
             return data;
-        }, 'consulta'),
+        });
 
-        readAll: (options = {}) => executeRequest(async () => {
-            const response = await service.readItems(options);
-            const data = response.data.data;
-            const meta = response.data.meta;
-            setState(prev => ({ ...prev, items: data, meta }));
-            return { data, meta };
-        }, 'listagem'),
+    const readAll = (options = {}) =>
+        run(async () => {
+            const res = await service.readItems(options);
+            const data = res.data.data;
+            setItems(data);
+            setMeta(res.data.meta);
+            return { data, meta: res.data.meta };
+        });
 
-        create: (data) => executeRequest(async () => {
-            const response = await service.createItem(data);
-            const newItem = response.data.data;
-            setState(prev => ({ ...prev, item: newItem }));
+    const create = (data) =>
+        run(async () => {
+            const res = await service.createItem(data);
+            const newItem = res.data.data;
+            setItem(newItem);
             return newItem;
-        }, 'criação'),
+        });
 
-        update: (id, data) => executeRequest(async () => {
-            const response = await service.updateItem(id, data);
-            const updatedItem = response.data.data;
-            setState(prev => ({ ...prev, item: updatedItem }));
+    const update = (id, data) =>
+        run(async () => {
+            const res = await service.updateItem(id, data);
+            const updatedItem = res.data.data;
+            setItem(updatedItem);
             return updatedItem;
-        }, 'atualização'),
+        });
 
-        remove: (id) => executeRequest(async () => {
+    const remove = (id) =>
+        run(async () => {
             await service.deleteItem(id);
-            setState(prev => ({ ...prev, item: null }));
+            setItem(null);
             return true;
-        }, 'exclusão'),
+        });
 
-        clearError: () => setState(prev => ({ ...prev, error: null }))
+    const uploadFiles = (formData) =>
+        run(async () => {
+            const res = await service.uploadFiles(formData);
+            const files = res.data.data;
+            setUploadedFiles(files);
+            return files;
+        });
+
+    return {
+        item,
+        items,
+        meta,
+        uploadedFiles,
+        loading,
+        error,
+        read,
+        readAll,
+        create,
+        update,
+        remove,
+        uploadFiles,
+        clearError,
     };
-
-    return { ...state, ...api };
 };

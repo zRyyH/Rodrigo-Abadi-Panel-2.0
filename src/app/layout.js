@@ -1,7 +1,6 @@
-import { AuthProvider } from "@/contexts/AuthContext";
-import { NotificationProvider } from "@/contexts/NotificationContext";
-import { LoadingProvider } from "@/contexts/LoadingContext";
 import { NotificationContainer } from "@/components/common/NotificationContainer";
+import { NotificationProvider } from "@/contexts/NotificationContext";
+import { AuthProvider } from "@/contexts/AuthContext";
 
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -27,10 +26,8 @@ export default function RootLayout({ children }) {
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <AuthProvider>
           <NotificationProvider>
-            <LoadingProvider>
-              {children}
-              <NotificationContainer />
-            </LoadingProvider>
+            {children}
+            <NotificationContainer />
           </NotificationProvider>
         </AuthProvider>
       </body>

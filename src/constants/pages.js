@@ -176,8 +176,12 @@ export const ORIGINS_CONFIG = {
 
 export const PRODUCTS_CONFIG = {
     query: {
-        fields: ['*', 'package_id.*', 'supplier_id.*'],
+        fields: ['*', 'package_id.*', 'supplier_id.*', 'gallery.*'],
         searchFields: ['sku', 'name', 'ncm', 'cest'],
+    },
+
+    queryId: {
+        fields: ['*', 'gallery.*'],
     },
 
     columns: [
@@ -213,6 +217,12 @@ export const PRODUCTS_CONFIG = {
     ],
 
     fields: [
+        {
+            name: "gallery",
+            label: "Galeria",
+            type: "images",
+            maxImages: 5
+        },
         {
             name: "name",
             label: "Nome do produto",

@@ -11,6 +11,8 @@ export default function ImageGallery({
 }) {
     const canAddMore = images.length < maxImages;
 
+    console.log(images)
+
     return (
         <div className="space-y-2">
             <h3 className="text-sm font-medium text-muted-foreground">Galeria</h3>

@@ -1,8 +1,10 @@
 import { Card, CardContent } from '@/components/ui/card';
-import DynamicForm from '@/components/common/DynamicForm'; // Mudança aqui
+import DynamicForm from '@/components/common/DynamicForm';
+import ImageCarousel from '@/components/common/ImageCarousel';
+import { useFileUpload } from '@/hooks/useFileUpload';
 import { EditHeader } from './EditHeader';
 import { EditActions } from './EditActions';
-import { useMemo } from 'react';
+import { settings } from "@/constants/config";
 
 export const EditForm = ({
     title,
@@ -14,65 +16,105 @@ export const EditForm = ({
     isSubmitting,
     mode = 'edit'
 }) => {
-    // Garantir que formData sempre tenha valores válidos para todos os campos
-    const safeFormData = useMemo(() => {
-        if (!formData || !fields) return {};
+    const { uploadFiles, isUploading } = useFileUpload();
 
-        const safeData = { ...formData };
+    // Formatar gallery para o ImageCarousel
+    const formatGalleryImages = (gallery) => {
+        if (!gallery || !Array.isArray(gallery)) return [];
+        return gallery.map(item => ({
+            id: item.directus_files_id,
+            url: `${settings.directus_url}/assets/${item.directus_files_id}`
+        }));
+    };
 
-        // Para cada campo definido, garantir que há um valor inicial
-        fields.forEach(field => {
-            const fieldName = field.name;
-            if (fieldName && !(fieldName in safeData)) {
-                // Definir valor padrão baseado no tipo do campo
-                switch (field.type) {
-                    case 'number':
-                        safeData[fieldName] = 0;
-                        break;
-                    case 'checkbox':
-                    case 'switch':
-                        safeData[fieldName] = false;
-                        break;
-                    case 'select':
-                        safeData[fieldName] = '';
-                        break;
-                    case 'file':
-                        safeData[fieldName] = null;
-                        break;
-                    case 'textarea':
-                    case 'text':
-                    case 'email':
-                    case 'password':
-                    default:
-                        safeData[fieldName] = '';
-                        break;
-                }
-            }
+    // Handler para upload de imagens
+    const handleImageUpload = async (files) => {
+        try {
+            const uploadedFiles = await uploadFiles(files);
+            const currentGallery = formData.gallery || [];
+            const newGalleryItems = uploadedFiles.map(file => ({
+                directus_files_id: file.id
+            }));
+
+            onFormChange({
+                ...formData,
+                gallery: [...currentGallery, ...newGalleryItems]
+            });
+        } catch (error) {
+            console.error('Erro no upload:', error);
+        }
+    };
+
+    // Handler para mudanças na galeria
+    const handleGalleryChange = (newImages) => {
+        const newGallery = newImages.map(img => ({
+            directus_files_id: img.id
+        }));
+        onFormChange({
+            ...formData,
+            gallery: newGallery
         });
+    };
 
-        return safeData;
-    }, [formData, fields]);
+    // Separar campos normais dos de imagem
+    const normalFields = fields.filter(f => f.type !== 'images');
+    const hasImageField = fields.some(f => f.type === 'images');
 
     return (
         <div className="container mx-auto p-6 max-w-2xl">
             <Card>
                 <EditHeader title={title} onBack={onBack} />
                 <CardContent>
-                    <DynamicForm
-                        fields={fields}
-                        values={safeFormData}
-                        onFieldChange={(fieldName, newValue) => {
-                            onFormChange({
-                                ...safeFormData,
-                                [fieldName]: newValue
-                            });
-                        }}
-                        className="space-y-6"
-                    />
+                    <div className="space-y-6">
+                        {/* Campos normais */}
+                        <DynamicForm
+                            fields={normalFields}
+                            values={formData}
+                            onFieldChange={(fieldName, value) => {
+                                onFormChange({
+                                    ...formData,
+                                    [fieldName]: value
+                                });
+                            }}
+                        />
+
+                        {/* Campo de imagens */}
+                        {hasImageField && (
+                            <div className="space-y-2">
+                                <label className="text-sm font-medium">Galeria de Imagens</label>
+
+                                <input
+                                    type="file"
+                                    multiple
+                                    accept="image/*"
+                                    onChange={async (e) => {
+                                        const files = Array.from(e.target.files);
+                                        if (files.length) {
+                                            await handleImageUpload(files);
+                                            e.target.value = '';
+                                        }
+                                    }}
+                                    disabled={isUploading}
+                                    className="mb-4 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                                />
+
+                                <ImageCarousel
+                                    images={formatGalleryImages(formData.gallery)}
+                                    onImagesChange={handleGalleryChange}
+                                    maxImages={10}
+                                />
+
+                                {isUploading && (
+                                    <p className="text-sm text-blue-600">Enviando imagens...</p>
+                                )}
+                            </div>
+                        )}
+                    </div>
+
                     <EditActions
-                        isSubmitting={isSubmitting}
+                        isSubmitting={isSubmitting || isUploading}
                         onSubmit={onSubmit}
-                        disabled={!formData}
+                        disabled={isUploading}
                         mode={mode}
                     />
                 </CardContent>

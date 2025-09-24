@@ -1,9 +1,9 @@
 import { useState, useRef } from 'react';
 import { cn } from '@/libs/utils';
-import ImagePreview from './components/ImagePreview';
-import ImageGallery from './components/ImageGallery';
-import FileInput from './components/FileInput';
-import { processFiles, adjustSelectedIndex } from './utils/imageUtils';
+import ImagePreview from './ImagePreview';
+import ImageGallery from './ImageGallery';
+import FileInput from './FileInput';
+import { processFiles, adjustSelectedIndex } from '@/utils/imageUtils';
 
 export default function ImageCarousel({
     images = [],

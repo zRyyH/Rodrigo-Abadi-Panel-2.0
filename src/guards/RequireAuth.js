@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth } from '@/contexts/AuthContext'
 
 export default function RequireAuth({ to = "/auth", children }) {
     const { user, loading } = useAuth();

@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { useNotification } from "@/hooks/useNotification";
+import { useNotification } from "@/contexts/NotificationContext";
 
 export default function AuthForm({ onSubmit, loading = false }) {
     const [email, setEmail] = useState("");

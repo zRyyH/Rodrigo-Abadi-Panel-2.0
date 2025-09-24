@@ -58,6 +58,8 @@ export default function TableFeature({
 
     const transformedData = dataTransformer(data);
 
+    console.log(transformedData);
+
     const handleDelete = async (item) => {
         const confirmText = deleteConfirmMessage.includes("{")
             ? deleteConfirmMessage.replace(/\{(\w+)\}/g, (match, key) => item[key] || match)

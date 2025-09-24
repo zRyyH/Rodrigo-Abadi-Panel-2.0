@@ -1,4 +1,3 @@
-// TableDataRow.js - Linha de Dados (sem animações)
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -15,9 +14,9 @@ export function TableDataRow({
     clickable,
     onRowClick
 }) {
-    const getImageUrl = (photoId) => {
-        if (!photoId) return null;
-        return `${settings.directus_url}/assets/${photoId}`;
+    const getImageUrl = (item) => {
+        if (!item) return null;
+        return `${settings.directus_url}/assets/${item?.gallery[0]?.directus_files_id}`;
     };
 
     return (
@@ -29,7 +28,7 @@ export function TableDataRow({
                 <TableCell className="py-4 px-6" onClick={e => e.stopPropagation()}>
                     <Avatar className="h-12 w-12">
                         <AvatarImage
-                            src={getImageUrl(item[imageField])}
+                            src={getImageUrl(item)}
                             alt={item[nameField] || 'Imagem'}
                         />
                         <AvatarFallback className="bg-muted text-muted-foreground">

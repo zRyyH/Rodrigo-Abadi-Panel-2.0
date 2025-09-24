@@ -1,72 +1,50 @@
 import { useState, useEffect, useCallback } from 'react';
-import useCrud from '@/hooks/useCrud';
+import { useCrud } from './useCrud';
 
-const useDynamicForm = (collection, itemId = null) => {
+const useFormHook = (collection, itemId = null, options = {}) => {
+    const { create, update, read, loading, error, clearError } = useCrud(collection);
+
     const [values, setValues] = useState({});
     const [initialValues, setInitialValues] = useState({});
     const [isDirty, setIsDirty] = useState(false);
 
-    const {
-        item,
-        loading,
-        error,
-        read,
-        create,
-        update,
-        clearError
-    } = useCrud(collection);
-
-    // Carrega item existente se itemId fornecido
     useEffect(() => {
         if (itemId) {
-            read(itemId);
+            read(itemId, options).then((fetched) => {
+                setValues(fetched);
+                setInitialValues(fetched);
+                setIsDirty(false);
+            }).catch(() => { });
         }
-    }, [itemId, read]);
+    }, [itemId]);
 
-    // Atualiza valores quando item é carregado
-    useEffect(() => {
-        if (item) {
-            setValues(item);
-            setInitialValues(item);
-            setIsDirty(false);
-        }
-    }, [item]);
-
-    // Manipula mudanças nos campos
-    const handleFieldChange = useCallback((fieldName, newValue) => {
+    const handleFieldChange = useCallback((field, newValue) => {
         setValues(prev => {
-            const updated = { ...prev, [fieldName]: newValue };
+            const updated = { ...prev, [field]: newValue };
             setIsDirty(JSON.stringify(updated) !== JSON.stringify(initialValues));
             return updated;
         });
     }, [initialValues]);
 
-    // Reseta formulário
     const resetForm = useCallback(() => {
         setValues(initialValues);
         setIsDirty(false);
-        clearError();
-    }, [initialValues, clearError]);
+    }, [initialValues]);
 
-    // Salva formulário
     const saveForm = useCallback(async () => {
-        try {
-            let result;
-            if (itemId) {
-                result = await update(itemId, values);
-            } else {
-                result = await create(values);
-            }
-
-            setInitialValues(values);
+        if (itemId) {
+            const res = await update(itemId, values);
+            setInitialValues(res);
             setIsDirty(false);
-            return result;
-        } catch (err) {
-            throw err;
+            return res;
+        } else {
+            const res = await create(values);
+            setInitialValues(res);
+            setIsDirty(false);
+            return res;
         }
     }, [itemId, values, update, create]);
 
-    // Valida se formulário pode ser salvo
     const canSave = !loading && isDirty && Object.keys(values).length > 0;
 
     return {
@@ -82,4 +60,4 @@ const useDynamicForm = (collection, itemId = null) => {
     };
 };
 
-export default useDynamicForm;
+export default useFormHook;

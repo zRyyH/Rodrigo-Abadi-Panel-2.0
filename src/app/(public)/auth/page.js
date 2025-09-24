@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { useAuth } from "@/hooks/useAuth";
-import { useNotification } from "@/hooks/useNotification";
+import { useAuth } from "@/contexts/AuthContext";
+import { useNotification } from "@/contexts/NotificationContext";
 import AuthForm from "@/components/auth/AuthForm";
 
 export default function AuthPage() {

@@ -3,6 +3,9 @@ import { Loader2, Save, Plus } from 'lucide-react';
 
 export const EditActions = ({ isSubmitting, onSubmit, disabled, mode = 'edit' }) => {
     const isCreateMode = mode === 'create';
+    const buttonText = isCreateMode ? 'Criar Item' : 'Salvar Alterações';
+    const loadingText = isCreateMode ? 'Criando...' : 'Salvando...';
+    const Icon = isCreateMode ? Plus : Save;
 
     return (
         <div className="flex gap-3 mt-6 pt-6 border-t">
@@ -14,16 +17,12 @@ export const EditActions = ({ isSubmitting, onSubmit, disabled, mode = 'edit' })
                 {isSubmitting ? (
                     <>
                         <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                        {isCreateMode ? 'Criando...' : 'Salvando...'}
+                        {loadingText}
                     </>
                 ) : (
                     <>
-                        {isCreateMode ? (
-                            <Plus className="h-4 w-4 mr-2" />
-                        ) : (
-                            <Save className="h-4 w-4 mr-2" />
-                        )}
-                        {isCreateMode ? 'Criar Item' : 'Salvar Alterações'}
+                        <Icon className="h-4 w-4 mr-2" />
+                        {buttonText}
                     </>
                 )}
             </Button>

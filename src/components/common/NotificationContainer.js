@@ -1,6 +1,6 @@
 "use client";
 
-import { useNotification } from "@/hooks/useNotification";
+import { useNotification } from "@/contexts/NotificationContext";
 import { Notification } from "@/components/common/Notification";
 
 export function NotificationContainer() {
