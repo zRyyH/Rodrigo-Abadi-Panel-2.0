@@ -15,6 +15,7 @@ export default function ProductDetails() {
                 maxImages={3}
                 redirectPath="/products"
                 options={configs.queryId}
+                title="Produto"
             />
         </div>
     );

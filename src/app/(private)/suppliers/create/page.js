@@ -11,6 +11,7 @@ export default function ProductDetails() {
                 fields={configs.fields}
                 redirectPath="/suppliers"
                 options={configs.queryId}
+                title="Fornecedor"
             />
         </div>
     );

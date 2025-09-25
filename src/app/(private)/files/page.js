@@ -5,7 +5,8 @@ import { useRouter } from 'next/navigation';
 import { useCrud } from '@/hooks/useCrudApi';
 import { useNotification } from '@/contexts/NotificationContext';
 import DynamicForm from '@/components/common/DynamicForm';
-import { configs } from '@/constants/pages/sales';
+import { configs } from '@/constants/pages/files';
+import { Button } from "@/components/ui/button";
 
 export default function UploadFiles() {
     const router = useRouter();
@@ -53,13 +54,9 @@ export default function UploadFiles() {
                     onFieldChange={handleFieldChange}
                 />
 
-                <button
-                    type="submit"
-                    disabled={loading || !values.fileSales || !values.fileInvoices}
-                    className="w-full py-2 px-4 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
-                >
+                <Button type="submit" disabled={loading || !values.fileSales || !values.fileInvoices}>
                     {loading ? 'Enviando...' : 'Enviar Arquivos'}
-                </button>
+                </Button>
             </form>
         </div>
     );

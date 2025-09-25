@@ -11,6 +11,7 @@ export default function ProductDetails() {
                 fields={configs.fields}
                 redirectPath="/origins"
                 options={configs.queryId}
+                title="Origem"
             />
         </div>
     );

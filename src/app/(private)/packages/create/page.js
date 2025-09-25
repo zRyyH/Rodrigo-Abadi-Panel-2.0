@@ -11,6 +11,7 @@ export default function ProductDetails() {
                 fields={configs.fields}
                 redirectPath="/packages"
                 options={configs.queryId}
+                title="Embalagem"
             />
         </div>
     );

@@ -11,6 +11,7 @@ export default function ProductDetails() {
                 fields={configs.fields}
                 redirectPath="/invoices"
                 options={configs.queryId}
+                title="Notas"
             />
         </div>
     );

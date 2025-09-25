@@ -6,6 +6,7 @@ import useFormHook from '@/hooks/useFormHook';
 import { useFileUpload } from '@/hooks/useFileUpload';
 import DynamicForm from '@/components/common/DynamicForm';
 import ImageCarousel from '@/components/common/ImageCarousel';
+import { Button } from "@/components/ui/button";
 
 export default function EditItemForm({
     collection,
@@ -16,14 +17,14 @@ export default function EditItemForm({
     maxImages = 5,
     redirectPath = null,
     className = '',
-    options = {}
+    options = {},
+    title = 'Item'
 }) {
     const router = useRouter();
     const params = useParams();
     const [mounted, setMounted] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    // Todos os hooks devem estar aqui, antes de qualquer return condicional
     const itemId = params.id === 'create' ? null : params.id;
 
     const {
@@ -50,7 +51,6 @@ export default function EditItemForm({
         setMounted(true);
     }, []);
 
-    // Agora sim, podemos fazer o return condicional
     if (!mounted) {
         return <div>Carregando...</div>;
     }
@@ -63,7 +63,6 @@ export default function EditItemForm({
             const savedItem = await saveForm();
 
             if (junctionCollection && junctionCollum) {
-                console.log("CHUPO MUITO:", savedItem.id, junctionCollum)
                 await create(savedItem.id, junctionCollum)
             }
 
@@ -85,27 +84,21 @@ export default function EditItemForm({
     };
 
     const isBusy = loading || isSubmitting;
-    const isNew = itemId === null;
-
-    console.log("FILES:", files);
 
     return (
         <div className={`space-y-6 ${className}`}>
             <div className="flex items-center justify-between">
                 <h1 className="text-2xl font-bold">
-                    {isNew ? 'Criar' : 'Editar'} {collection}
+                    {itemId ? 'Editar' : 'Criar'} {title}
                 </h1>
             </div>
 
             {error && (
                 <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
                     {error.message || 'Erro ao processar operação'}
-                    <button
-                        onClick={clearError}
-                        className="ml-2 text-red-500 hover:text-red-700"
-                    >
+                    <Button onClick={clearError}>
                         ×
-                    </button>
+                    </Button>
                 </div>
             )}
 
@@ -132,21 +125,13 @@ export default function EditItemForm({
             )}
 
             <div className="flex gap-3 pt-4">
-                <button
-                    onClick={handleSave}
-                    disabled={isBusy}
-                    className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed"
-                >
-                    {isBusy ? 'Salvando...' : (isNew ? 'Criar' : 'Atualizar')}
-                </button>
+                <Button onClick={handleSave} disabled={isBusy}>
+                    {isBusy ? 'Salvando...' : (itemId ? 'Atualizar' : 'Criar')}
+                </Button>
 
-                <button
-                    onClick={handleCancel}
-                    disabled={isBusy}
-                    className="flex-1 bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 disabled:opacity-50"
-                >
+                <Button onClick={handleCancel} disabled={isBusy}>
                     Cancelar
-                </button>
+                </Button>
             </div>
         </div>
     );
