@@ -26,7 +26,7 @@ export default function Header() {
     const navigate = (path) => router.push(path)
 
     return (
-        <header className="flex items-center justify-between px-6 py-4 bg-white border-b">
+        <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 bg-white border-b animate-in fade-in slide-in-from-top-4 duration-500">
             <h1 className="text-xl font-semibold text-gray-900">Rodrigo Abadi</h1>
 
             <nav className="flex items-center gap-4">

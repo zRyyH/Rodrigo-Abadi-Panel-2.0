@@ -13,8 +13,6 @@ export function useFileApi(junctionCollection) {
                 ...options,
             });
 
-            console.log("BAIXO", response)
-
             return (
                 response.data?.map((item) =>
                     buildFileObj(item?.directus_files_id)
@@ -37,7 +35,6 @@ export function useFileApi(junctionCollection) {
             });
 
             const response = await fileCrud.uploadFiles(formData);
-            console.log("BAIXO", response)
             const uploaded = normalizeResponse(response);
 
             return uploaded.map((file) => buildFileObj(file?.id));

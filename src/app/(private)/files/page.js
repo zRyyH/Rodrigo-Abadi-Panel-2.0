@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useCrud } from '@/hooks/useCrudApi';
+import { useCrudApi } from '@/hooks/useCrudApi';
 import { useNotification } from '@/contexts/NotificationContext';
 import DynamicForm from '@/components/common/DynamicForm';
 import { configs } from '@/constants/pages/files';
@@ -13,7 +13,7 @@ import { Separator } from "@/components/ui/separator";
 
 export default function UploadFiles() {
     const router = useRouter();
-    const { uploadedFiles, loading, error, uploadFiles, clearError } = useCrud('/api/upload');
+    const { loading, error, uploadFiles, clearError } = useCrudApi('/api/upload');
     const { showSuccess, showError } = useNotification();
     const [values, setValues] = useState({});
 

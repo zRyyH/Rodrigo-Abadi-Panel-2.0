@@ -26,8 +26,7 @@ export default function ImageCarousel({ images = [], onImagesChange, deleteImage
         if (fileId) {
             await deleteImage(images[index].directus_files_id)
         }
-
-        console.log("cabecao grande", images, index)
+        
         const updatedImages = images.filter((_, i) => i !== index);
         onImagesChange(updatedImages);
         setSelectedIndex(getValidIndex(updatedImages, selectedIndex));
