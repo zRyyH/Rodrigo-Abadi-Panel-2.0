@@ -16,7 +16,7 @@ export default function NFEsPage() {
             queryConfig={configs.query}
             columns={configs.columns}
             filterConfigs={configs.filters}
-            title="NFEs"
+            title="NFE"
             icon={FileText}
             dataTransformer={dataTransformer}
             showImage={false}

@@ -18,7 +18,7 @@ export default function ProductsPage() {
             queryConfig={configs.query}
             columns={configs.columns}
             filterConfigs={configs.filters}
-            title="Produtos"
+            title="Produto"
             icon={FileText}
             createRoute="/products/create"
             detailRoute="/products/{id}"

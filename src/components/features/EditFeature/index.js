@@ -7,6 +7,12 @@ import { useFileUpload } from '@/hooks/useFileUpload';
 import DynamicForm from '@/components/common/DynamicForm';
 import ImageCarousel from '@/components/common/ImageCarousel';
 import { Button } from "@/components/ui/button";
+import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
+import { Skeleton } from "@/components/ui/skeleton";
+import { cn } from "@/libs/utils";
 
 export default function EditItemForm({
     collection,
@@ -52,7 +58,12 @@ export default function EditItemForm({
     }, []);
 
     if (!mounted) {
-        return <div>Carregando...</div>;
+        return (
+            <div className="space-y-4">
+                <Skeleton className="h-10 w-64" />
+                <Skeleton className="h-96 w-full" />
+            </div>
+        );
     }
 
     const handleSave = async () => {
@@ -86,51 +97,61 @@ export default function EditItemForm({
     const isBusy = loading || isSubmitting;
 
     return (
-        <div className={`space-y-6 ${className}`}>
-            <div className="flex items-center justify-between">
-                <h1 className="text-2xl font-bold">
+        <Card className={cn(
+            "animate-in slide-in-from-bottom-4 duration-500",
+            className
+        )}>
+            <CardHeader>
+                <CardTitle>
                     {itemId ? 'Editar' : 'Criar'} {title}
-                </h1>
-            </div>
+                </CardTitle>
+            </CardHeader>
 
-            {error && (
-                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
-                    {error.message || 'Erro ao processar operação'}
-                    <Button onClick={clearError}>
-                        ×
-                    </Button>
-                </div>
-            )}
+            <CardContent className="space-y-6">
+                {error && (
+                    <Alert variant="destructive">
+                        <AlertTitle>Erro</AlertTitle>
+                        <AlertDescription>
+                            {error.message || 'Erro ao processar operação'}
+                        </AlertDescription>
+                    </Alert>
+                )}
 
-            <DynamicForm
-                fields={fields}
-                values={values}
-                onChange={handleFieldChange} />
+                <DynamicForm
+                    fields={fields}
+                    values={values}
+                    onChange={handleFieldChange}
+                />
 
-            {hasImages && junctionCollection && (
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Imagens
-                    </label>
-                    <ImageCarousel
-                        images={files}
-                        onImagesChange={setFiles}
-                        deleteImage={remove}
-                        maxImages={maxImages}
-                        className="border rounded-lg p-4"
-                    />
-                </div>
-            )}
+                {hasImages && junctionCollection && (
+                    <div className="space-y-2">
+                        <Label>Imagens</Label>
+                        <ImageCarousel
+                            images={files}
+                            onImagesChange={setFiles}
+                            deleteImage={remove}
+                            maxImages={maxImages}
+                            className="border rounded-lg p-4"
+                        />
+                    </div>
+                )}
+            </CardContent>
 
-            <div className="flex gap-3 pt-4">
+            <Separator />
+
+            <CardFooter className="flex gap-3">
                 <Button onClick={handleSave} disabled={isBusy}>
                     {isBusy ? 'Salvando...' : (itemId ? 'Atualizar' : 'Criar')}
                 </Button>
 
-                <Button onClick={handleCancel} disabled={isBusy}>
+                <Button
+                    variant="outline"
+                    onClick={handleCancel}
+                    disabled={isBusy}
+                >
                     Cancelar
                 </Button>
-            </div>
-        </div>
+            </CardFooter>
+        </Card>
     );
 }

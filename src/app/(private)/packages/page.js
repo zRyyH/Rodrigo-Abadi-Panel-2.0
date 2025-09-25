@@ -16,7 +16,7 @@ export default function PackagesPage() {
             queryConfig={configs.query}
             columns={configs.columns}
             filterConfigs={configs.filters}
-            title="Embalagens"
+            title="Embalagem"
             icon={FileText}
             createRoute="/packages/create"
             detailRoute="/packages/{id}"

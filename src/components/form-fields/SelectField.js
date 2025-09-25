@@ -27,7 +27,7 @@ export const SelectField = ({
     return (
         <Select value={value} onValueChange={onChange} disabled={disabled || loading}>
             <SelectTrigger>
-                <SelectValue placeholder={loading ? 'Carregando...' : placeholder} />
+                <SelectValue placeholder={loading ? 'Carregando...' : placeholder || "Selecionar item..."} />
             </SelectTrigger>
             <SelectContent>
                 {selectOptions.map((option) => (

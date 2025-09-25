@@ -16,7 +16,7 @@ export default function salesPage() {
             queryConfig={configs.query}
             columns={configs.columns}
             filterConfigs={configs.filters}
-            title="Vendas"
+            title="Venda"
             icon={FileText}
             detailRoute="/sales/{id}"
             dataTransformer={dataTransformer}

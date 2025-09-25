@@ -125,7 +125,7 @@ export default function TableFeature({
                     </div>
                     {createRoute && (
                         <Button onClick={() => router.push(createRoute)}>
-                            Novo {title.slice(0, -1)}
+                            Criar {title}
                         </Button>
                     )}
                 </div>

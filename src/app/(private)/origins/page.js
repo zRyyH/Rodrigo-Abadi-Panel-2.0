@@ -16,7 +16,7 @@ export default function OriginsPage() {
             queryConfig={configs.query}
             columns={configs.columns}
             filterConfigs={configs.filters}
-            title="Origens"
+            title="Origem"
             icon={FileText}
             createRoute="/origins/create"
             detailRoute="/origins/{id}"

@@ -17,7 +17,7 @@ export default function InvoicesPage() {
             queryConfig={configs.query}
             columns={configs.columns}
             filterConfigs={configs.filters}
-            title="Notas fiscais"
+            title="Nota Fiscal"
             icon={FileText}
             createRoute="/invoices/create"
             detailRoute="/invoices/{id}"

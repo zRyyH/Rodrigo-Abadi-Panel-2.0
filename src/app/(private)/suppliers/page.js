@@ -16,7 +16,7 @@ export default function SuppliersPage() {
             queryConfig={configs.query}
             columns={configs.columns}
             filterConfigs={configs.filters}
-            title="Fornecedores"
+            title="Fornecedor"
             icon={FileText}
             createRoute="/suppliers/create"
             detailRoute="/suppliers/{id}"
