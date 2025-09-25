@@ -51,6 +51,13 @@ export const useCrud = (collection) => {
             return true;
         });
 
+    const removeBatch = (query) =>
+        run(async () => {
+            await service.deleteItems(query);
+            setItem(null);
+            return true;
+        });
+
     const uploadFiles = (formData) =>
         run(async () => {
             const res = await service.uploadFiles(formData);
@@ -71,6 +78,7 @@ export const useCrud = (collection) => {
         create,
         update,
         remove,
+        removeBatch,
         uploadFiles,
         clearError,
     };

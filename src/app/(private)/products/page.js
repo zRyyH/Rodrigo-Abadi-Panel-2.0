@@ -1,8 +1,8 @@
 "use client";
 
 import TableFeature from "@/components/features/TableFeature";
+import { configs } from '@/constants/pages/products';
 import { FileText } from "lucide-react";
-import { PRODUCTS_CONFIG } from '@/constants/pages';
 
 export default function ProductsPage() {
     const dataTransformer = (products) =>
@@ -15,9 +15,9 @@ export default function ProductsPage() {
     return (
         <TableFeature
             collection="products"
-            queryConfig={PRODUCTS_CONFIG.query}
-            columns={PRODUCTS_CONFIG.columns}
-            filterConfigs={PRODUCTS_CONFIG.filters}
+            queryConfig={configs.query}
+            columns={configs.columns}
+            filterConfigs={configs.filters}
             title="Produtos"
             icon={FileText}
             createRoute="/products/create"

@@ -49,6 +49,16 @@ class DirectusBaseService {
         }
     }
 
+    async deleteItems(options) {
+        try {
+            const params = this._buildParams(options);
+            await httpClient.delete(`items/${this.collection}`, { params });
+            return true;
+        } catch (error) {
+            throw new Error(`Erro ao deletar items: ${error.message}`);
+        }
+    }
+
     async uploadFiles(formData) {
         try {
             return await httpClient.post('files', formData, {

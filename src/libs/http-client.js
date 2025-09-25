@@ -8,8 +8,24 @@ const httpClient = axios.create({
     },
 });
 
+const httpClientApi = axios.create({
+    baseURL: `${settings.api_url}/`,
+    headers: {
+        'Content-Type': 'application/json',
+    },
+});
+
 // Interceptor para adicionar token
 httpClient.interceptors.request.use((config) => {
+    const token = getToken();
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+});
+
+// Interceptor para adicionar token
+httpClientApi.interceptors.request.use((config) => {
     const token = getToken();
     if (token) {
         config.headers.Authorization = `Bearer ${token}`;
@@ -74,4 +90,4 @@ async function refreshToken() {
     return response.data.data;
 }
 
-export { httpClient, setToken, removeToken };
+export { httpClient, httpClientApi, setToken, removeToken };

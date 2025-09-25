@@ -43,22 +43,22 @@ export default function Header() {
                         <DropdownMenuItem onClick={() => navigate('/products')}>
                             Estoque Produtos
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => navigate('/products/invoices/create')}>
+                        <DropdownMenuItem onClick={() => navigate('/invoices/create')}>
                             Cadastro Fiscal
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => navigate('/products/invoices')}>
+                        <DropdownMenuItem onClick={() => navigate('/invoices')}>
                             Estoque Fiscal
                         </DropdownMenuItem>
                         <DropdownMenuSub>
                             <DropdownMenuSubTrigger>Configurações</DropdownMenuSubTrigger>
                             <DropdownMenuSubContent>
-                                <DropdownMenuItem onClick={() => navigate('/products/settings/suppliers')}>
+                                <DropdownMenuItem onClick={() => navigate('/suppliers')}>
                                     Fornecedores
                                 </DropdownMenuItem>
-                                <DropdownMenuItem onClick={() => navigate('/products/settings/packages')}>
+                                <DropdownMenuItem onClick={() => navigate('/packages')}>
                                     Embalagens
                                 </DropdownMenuItem>
-                                <DropdownMenuItem onClick={() => navigate('/products/settings/origins')}>
+                                <DropdownMenuItem onClick={() => navigate('/origins')}>
                                     Origens
                                 </DropdownMenuItem>
                             </DropdownMenuSubContent>
@@ -73,13 +73,13 @@ export default function Header() {
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
-                        <DropdownMenuItem onClick={() => navigate('/sales/create')}>
+                        <DropdownMenuItem onClick={() => navigate('/files')}>
                             Inserir planilha de vendas
                         </DropdownMenuItem>
                         <DropdownMenuItem onClick={() => navigate('/sales')}>
                             Vendas
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => navigate('/sales/nfes')}>
+                        <DropdownMenuItem onClick={() => navigate('/nfes')}>
                             Arquivos notas fiscais
                         </DropdownMenuItem>
                     </DropdownMenuContent>
@@ -92,10 +92,10 @@ export default function Header() {
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
-                        <DropdownMenuItem onClick={() => navigate('/metrics/statistics')}>
+                        <DropdownMenuItem onClick={() => navigate('/statistics')}>
                             Estatísticas
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => navigate('/metrics/map')}>
+                        <DropdownMenuItem onClick={() => navigate('/map')}>
                             Mapa de vendas
                         </DropdownMenuItem>
                     </DropdownMenuContent>

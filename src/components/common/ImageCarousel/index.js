@@ -1,45 +1,48 @@
 import { useState, useRef } from 'react';
-import { cn } from '@/libs/utils';
 import ImagePreview from './ImagePreview';
 import ImageGallery from './ImageGallery';
-import FileInput from './FileInput';
-import { processFiles, adjustSelectedIndex } from '@/utils/imageUtils';
+import { processFiles, getValidIndex } from '@/utils/imageUtils';
 
-export default function ImageCarousel({
-    images = [],
-    onImagesChange,
-    maxImages = 5,
-    className
-}) {
+export default function ImageCarousel({ images = [], onImagesChange, deleteImage, maxImages = 5 }) {
     const [selectedIndex, setSelectedIndex] = useState(0);
-    const fileInputRef = useRef(null);
+    const inputRef = useRef(null);
 
-    const handleFileSelect = (event) => {
-        const newImages = processFiles(event.target.files, maxImages, images.length);
-        onImagesChange([...images, ...newImages]);
+    const handleFileSelect = (e) => {
+        const newImages = processFiles(e.target.files, maxImages, images.length);
+        const updatedImages = [...images, ...newImages];
+
+        onImagesChange(updatedImages);
 
         if (images.length === 0 && newImages.length > 0) {
             setSelectedIndex(0);
         }
+
+        e.target.value = '';
     };
 
-    const removeImage = (index) => {
+    const removeImage = async (index) => {
+        const fileId = images[index].directus_files_id
+
+        if (fileId) {
+            await deleteImage(images[index].directus_files_id)
+        }
+
+        console.log("cabecao grande", images, index)
         const updatedImages = images.filter((_, i) => i !== index);
         onImagesChange(updatedImages);
-        setSelectedIndex(adjustSelectedIndex(selectedIndex, updatedImages.length));
+        setSelectedIndex(getValidIndex(updatedImages, selectedIndex));
     };
 
-    const openFileDialog = () => fileInputRef.current?.click();
+    const openFiles = () => inputRef.current?.click();
 
     return (
-        <div className={cn("space-y-4", className)}>
-            <div className="space-y-2">
-                <h3 className="text-sm font-medium text-muted-foreground">Foto</h3>
+        <div className="space-y-4">
+            <div>
+                <p className="text-sm mb-2">Foto</p>
                 <ImagePreview
                     image={images[selectedIndex]}
                     onRemove={() => removeImage(selectedIndex)}
-                    onUploadClick={openFileDialog}
-                    showUpload={images.length === 0}
+                    onUpload={openFiles}
                 />
             </div>
 
@@ -47,13 +50,17 @@ export default function ImageCarousel({
                 images={images}
                 selectedIndex={selectedIndex}
                 onSelect={setSelectedIndex}
-                onUploadClick={openFileDialog}
+                onUpload={openFiles}
                 maxImages={maxImages}
             />
 
-            <FileInput
-                ref={fileInputRef}
-                onFileSelect={handleFileSelect}
+            <input
+                ref={inputRef}
+                type="file"
+                accept="image/*"
+                multiple
+                className="hidden"
+                onChange={handleFileSelect}
             />
         </div>
     );

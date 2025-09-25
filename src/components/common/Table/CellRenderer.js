@@ -1,4 +1,3 @@
-// CellRenderer.js - Renderização de Células (sem animações)
 import { Badge } from "@/components/ui/badge";
 
 export function CellRenderer({ item, column }) {

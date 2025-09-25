@@ -1,40 +1,63 @@
-import { useState } from 'react';
-import DirectusBaseService from '@/services/base';
+import { useState, useEffect } from 'react';
+import { useFileApi } from './useFileApi';
 
-const fileService = new DirectusBaseService('files');
-
-export function useFileUpload() {
+export function useFileUpload(junctionCollection, relationCollum, itemId, options = {}) {
+    const [files, setFiles] = useState([]);
+    const [uploadedFiles, setUploadedFiles] = useState([]);
     const [isUploading, setIsUploading] = useState(false);
 
-    const uploadFiles = async (filesInput) => {
-        if (!filesInput) {
-            return null;
-        }
+    const { loadExistingFiles, uploadFiles, removeRelation, createRelation } = useFileApi(junctionCollection);
 
-        const filesArray = Array.isArray(filesInput) ? filesInput : [filesInput];
-        setIsUploading(true);
+    // Carregar arquivos existentes
+    useEffect(() => {
+        const fetchFiles = async () => {
+            if (itemId && junctionCollection) {
+                const existing = await loadExistingFiles(itemId, options);
+                setFiles(existing);
+            }
+        };
 
-        try {
-            const formData = new FormData();
-            filesArray.forEach(file => {
-                formData.append('file', file);
-            });
+        fetchFiles();
+    }, [itemId, junctionCollection]);
 
-            const response = await fileService.uploadFiles(formData);
-            const uploadedFiles = response.data.data;
+    // Upload automático quando `files` muda
+    useEffect(() => {
+        const handleUpload = async () => {
+            if (files.filter(item => item.file).length > 0) {
+                setIsUploading(true);
+                try {
+                    const response = await uploadFiles(files);
+                    setUploadedFiles(prev => [...prev, ...response])
+                } finally {
+                    setIsUploading(false);
+                }
+            }
+        };
 
-            const isMultipleFiles = Array.isArray(filesInput);
-            return isMultipleFiles ? uploadedFiles : uploadedFiles[0];
+        handleUpload();
+    }, [files]);
 
-        } catch (error) {
-            throw error;
-        } finally {
-            setIsUploading(false);
-        }
+    const create = async (itemId, relationCollum) => {
+        const payload = uploadedFiles.map(file => {
+            return {
+                directus_files_id: file.directus_files_id,
+                [relationCollum]: itemId
+            }
+        })
+
+        return await createRelation(payload)
     };
 
+    // const remove = async () => {
+    //     return await removeRelation(itemId, relationCollum)
+    // };
+
     return {
-        uploadFiles,
-        isUploading
+        files,
+        setFiles,
+        isUploading,
+        uploadedFiles,
+        remove: removeRelation,
+        create
     };
 }

@@ -1,4 +1,3 @@
-// TableEmptyState.js - Estado Vazio (sem animações)
 import { TableCell, TableRow } from "@/components/ui/table";
 
 export function TableEmptyState({ colSpan }) {

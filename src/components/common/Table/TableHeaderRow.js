@@ -1,4 +1,3 @@
-// TableHeaderRow.js - Cabeçalho da Tabela
 import { TableHead, TableRow } from "@/components/ui/table";
 
 export function TableHeaderRow({ columns, showImage, hasActions }) {

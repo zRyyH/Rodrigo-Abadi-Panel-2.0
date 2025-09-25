@@ -1,18 +1,21 @@
 "use client";
 
 import EditFeature from "@/components/features/EditFeature";
-import { PRODUCTS_CONFIG } from "@/constants/pages";
+import { configs } from "@/constants/pages/products";
 
 export default function ProductDetails() {
     return (
-        <EditFeature
-            collection="products"
-            fields={PRODUCTS_CONFIG.fields}
-            title="Criar Produto"
-            redirectPath="/products"
-            queryOptions={{ fields: ['*'] }}
-            onSuccess={(item) => console.log('Sucesso!', item)}
-            mode="create"
-        />
+        <div className="max-w-2xl mx-auto p-6">
+            <EditFeature
+                collection="products"
+                fields={configs.fields}
+                hasImages={true}
+                junctionCollection="products_files"
+                junctionCollum="products_id"
+                maxImages={3}
+                redirectPath="/products"
+                options={configs.queryId}
+            />
+        </div>
     );
 }

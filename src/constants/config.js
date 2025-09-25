@@ -1,8 +1,7 @@
 export const settings = {
-  api_token: process.env.NEXT_PUBLIC_API_BEARER_TOKEN,
-  api_url: process.env.NEXT_PUBLIC_API_URL,
   directus_url: process.env.NEXT_PUBLIC_DIRECTUS_URL,
-  key_cookie: process.env.NEXT_PUBLIC_AUTH_KEY,
+  api_url: process.env.NEXT_PUBLIC_API_URL,
+  key_cookie: 'auth',
 };
 
 export const collections = {

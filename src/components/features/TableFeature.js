@@ -58,8 +58,6 @@ export default function TableFeature({
 
     const transformedData = dataTransformer(data);
 
-    console.log(transformedData);
-
     const handleDelete = async (item) => {
         const confirmText = deleteConfirmMessage.includes("{")
             ? deleteConfirmMessage.replace(/\{(\w+)\}/g, (match, key) => item[key] || match)
@@ -86,7 +84,6 @@ export default function TableFeature({
     ];
 
     const handleRemoveFilter = (key) => {
-        console.log('removendo:', filters[key])
         delete filters[key];
         setFilters(filters);
     }
@@ -97,7 +94,6 @@ export default function TableFeature({
 
     // CORREÇÃO: Função para lidar com mudanças de filtro
     const handleFilterChange = (key, value) => {
-        console.log(key, value, filters)
 
         const updatedFilters = { ...filters };
 

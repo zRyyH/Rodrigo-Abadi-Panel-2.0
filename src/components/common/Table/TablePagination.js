@@ -1,4 +1,3 @@
-// TablePagination.js - Paginação (sem animações)
 import {
     Pagination,
     PaginationContent,

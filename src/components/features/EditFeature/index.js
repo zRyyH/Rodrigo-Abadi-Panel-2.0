@@ -1,64 +1,153 @@
-import useFormHook from '@/hooks/useFormHook';
-import LoadingScreen from '@/components/common/LoadingScreen';
-import { EditForm } from './EditForm';
-import { useRouter, useParams } from 'next/navigation';
+'use client';
 
-const EditPage = ({
+import { useEffect, useState } from 'react';
+import { useRouter, useParams } from 'next/navigation';
+import useFormHook from '@/hooks/useFormHook';
+import { useFileUpload } from '@/hooks/useFileUpload';
+import DynamicForm from '@/components/common/DynamicForm';
+import ImageCarousel from '@/components/common/ImageCarousel';
+
+export default function EditItemForm({
     collection,
     fields = [],
-    options = {},
-    title,
-    redirectPath = '/',
-    onSuccess,
-    mode = 'edit'
-}) => {
+    hasImages = false,
+    junctionCollection = null,
+    junctionCollum = null,
+    maxImages = 5,
+    redirectPath = null,
+    className = '',
+    options = {}
+}) {
     const router = useRouter();
-    const { id } = useParams();
-    const isCreateMode = mode === 'create';
+    const params = useParams();
+    const [mounted, setMounted] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    // Todos os hooks devem estar aqui, antes de qualquer return condicional
+    const itemId = params.id === 'create' ? null : params.id;
 
     const {
-        values: formData,
+        values,
         loading,
+        error,
         handleFieldChange,
-        saveForm
-    } = useFormHook(collection, isCreateMode ? null : id, options);
+        saveForm,
+        clearError
+    } = useFormHook(collection, itemId, options);
 
-    const handleSubmit = async () => {
-        const result = await saveForm();
-        if (result) {
-            onSuccess?.(result);
-            router.push(redirectPath);
+    const {
+        files,
+        setFiles,
+        remove,
+        create
+    } = useFileUpload(
+        hasImages ? junctionCollection : null,
+        junctionCollum,
+        itemId
+    );
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    // Agora sim, podemos fazer o return condicional
+    if (!mounted) {
+        return <div>Carregando...</div>;
+    }
+
+    const handleSave = async () => {
+        try {
+            setIsSubmitting(true);
+            clearError();
+
+            const savedItem = await saveForm();
+
+            if (junctionCollection && junctionCollum) {
+                console.log("CHUPO MUITO:", savedItem.id, junctionCollum)
+                await create(savedItem.id, junctionCollum)
+            }
+
+            if (savedItem) {
+                const path = redirectPath || `/${collection}`;
+                router.push(path);
+            }
+
+        } catch (err) {
+            console.error('Erro ao salvar:', err);
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
-    // Função simplificada que não itera sobre todos os campos
-    const handleFormChange = (newData) => {
-        // Só atualiza os campos que realmente mudaram
-        const changedFields = Object.keys(newData).filter(
-            key => JSON.stringify(formData[key]) !== JSON.stringify(newData[key])
-        );
-
-        changedFields.forEach(field => {
-            handleFieldChange(field, newData[field]);
-        });
+    const handleCancel = () => {
+        const path = redirectPath || `/${collection}`;
+        router.push(path);
     };
 
-    if (loading) return <LoadingScreen />;
+    const isBusy = loading || isSubmitting;
+    const isNew = itemId === null;
 
-    console.log("formdata:", formData)
+    console.log("FILES:", files);
 
     return (
-        <EditForm
-            title={title || (isCreateMode ? 'Criar Novo Item' : 'Editar Item')}
-            fields={fields}
-            formData={formData || {}}
-            onFormChange={handleFormChange}
-            onSubmit={handleSubmit}
-            onBack={() => router.push(redirectPath)}
-            isSubmitting={loading}
-            mode={mode}
-        />
-    );
-};
+        <div className={`space-y-6 ${className}`}>
+            <div className="flex items-center justify-between">
+                <h1 className="text-2xl font-bold">
+                    {isNew ? 'Criar' : 'Editar'} {collection}
+                </h1>
+            </div>
 
-export default EditPage;
+            {error && (
+                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+                    {error.message || 'Erro ao processar operação'}
+                    <button
+                        onClick={clearError}
+                        className="ml-2 text-red-500 hover:text-red-700"
+                    >
+                        ×
+                    </button>
+                </div>
+            )}
+
+            <DynamicForm
+                fields={fields}
+                values={values}
+                onFieldChange={handleFieldChange}
+                className="space-y-4"
+            />
+
+            {hasImages && junctionCollection && (
+                <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Imagens
+                    </label>
+                    <ImageCarousel
+                        images={files}
+                        onImagesChange={setFiles}
+                        deleteImage={remove}
+                        maxImages={maxImages}
+                        className="border rounded-lg p-4"
+                    />
+                </div>
+            )}
+
+            <div className="flex gap-3 pt-4">
+                <button
+                    onClick={handleSave}
+                    disabled={isBusy}
+                    className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed"
+                >
+                    {isBusy ? 'Salvando...' : (isNew ? 'Criar' : 'Atualizar')}
+                </button>
+
+                <button
+                    onClick={handleCancel}
+                    disabled={isBusy}
+                    className="flex-1 bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 disabled:opacity-50"
+                >
+                    Cancelar
+                </button>
+            </div>
+        </div>
+    );
+}

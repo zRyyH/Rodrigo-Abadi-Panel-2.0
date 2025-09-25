@@ -15,8 +15,9 @@ export function TableDataRow({
     onRowClick
 }) {
     const getImageUrl = (item) => {
-        if (!item) return null;
-        return `${settings.directus_url}/assets/${item?.gallery[0]?.directus_files_id}`;
+        const fileId = item?.gallery[0]?.directus_files_id
+        if (!fileId) return null;
+        return `${settings.directus_url}/assets/${fileId}`;
     };
 
     return (
