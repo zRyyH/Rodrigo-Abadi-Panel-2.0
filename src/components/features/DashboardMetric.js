@@ -12,7 +12,6 @@ import LoadingScreen from '@/components/common/LoadingScreen'
 
 export function DashboardMetric({
     endpoint,
-    className,
     title = "Métricas",
     description = "Visão geral do desempenho e status atual",
     buildCards
@@ -31,17 +30,15 @@ export function DashboardMetric({
     const cards = buildCards(item.data.data[0])
 
     return (
-        <div className={className}>
-            <Card>
-                <CardHeader>
-                    <CardTitle>{title}</CardTitle>
-                    <CardDescription>{description}</CardDescription>
-                </CardHeader>
-                <Separator />
-                <CardContent className="pt-6">
-                    <DashboardCards items={cards} />
-                </CardContent>
-            </Card>
-        </div>
+        <Card className="animate-in fade-in-0 slide-in-from-bottom-4 duration-500">
+            <CardHeader className="space-y-1.5">
+                <CardTitle>{title}</CardTitle>
+                <CardDescription>{description}</CardDescription>
+            </CardHeader>
+            <Separator />
+            <CardContent className="pt-2 pb-2">
+                <DashboardCards items={cards} />
+            </CardContent>
+        </Card>
     )
 }
