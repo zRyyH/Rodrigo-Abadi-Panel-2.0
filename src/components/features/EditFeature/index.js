@@ -105,9 +105,7 @@ export default function EditItemForm({
             <DynamicForm
                 fields={fields}
                 values={values}
-                onFieldChange={handleFieldChange}
-                className="space-y-4"
-            />
+                onChange={handleFieldChange} />
 
             {hasImages && junctionCollection && (
                 <div>

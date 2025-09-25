@@ -51,7 +51,7 @@ export default function UploadFiles() {
                 <DynamicForm
                     fields={configs.fields}
                     values={values}
-                    onFieldChange={handleFieldChange}
+                    onChange={handleFieldChange}
                 />
 
                 <Button type="submit" disabled={loading || !values.fileSales || !values.fileInvoices}>

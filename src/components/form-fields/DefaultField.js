@@ -2,11 +2,12 @@
 
 import { Input } from '@/components/ui/input';
 
-export const DefaultField = ({ field, formField, editable }) => (
+export const DefaultField = ({ type = 'text', value, onChange, disabled, placeholder }) => (
     <Input
-        type={field.type === 'default' ? 'text' : field.type}
-        disabled={!editable}
-        placeholder={field.placeholder}
-        {...formField}
+        type={type}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        disabled={disabled}
+        placeholder={placeholder}
     />
 );

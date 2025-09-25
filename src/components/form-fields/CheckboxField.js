@@ -2,6 +2,10 @@
 
 import { Checkbox } from '@/components/ui/checkbox';
 
-export const CheckboxField = ({ formField, editable }) => (
-    <Checkbox disabled={!editable} checked={formField.value} onCheckedChange={formField.onChange} />
+export const CheckboxField = ({ value, onChange, disabled }) => (
+    <Checkbox
+        checked={value}
+        onCheckedChange={onChange}
+        disabled={disabled}
+    />
 );

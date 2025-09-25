@@ -4,38 +4,33 @@ import { useEffect } from 'react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useCrud } from '@/hooks/useCrud';
 
-export const SelectField = ({ field, formField, editable }) => {
-    const { items, readAll, loading } = useCrud(field.collection);
+export const SelectField = ({
+    value,
+    onChange,
+    disabled,
+    placeholder,
+    options = [],
+    collection,
+    optionLabel,
+    optionValue = 'id'
+}) => {
+    const { items, readAll, loading } = useCrud(collection);
 
     useEffect(() => {
-        if (field.collection && field.optionLabel) {
-            readAll();
-        }
-    }, [field.collection, field.optionLabel]);
+        if (collection && optionLabel) readAll();
+    }, [collection, optionLabel]);
 
-    const options = field.collection && field.optionLabel
-        ? items.map(item => ({
-            value: item[field.optionValue || 'id'],
-            label: item[field.optionLabel]
-        }))
-        : field.options || [];
+    const selectOptions = collection && optionLabel
+        ? items.map(item => ({ value: item[optionValue], label: item[optionLabel] }))
+        : options;
 
     return (
-        <Select
-            disabled={!editable || loading}
-            value={formField.value}
-            onValueChange={formField.onChange}
-        >
+        <Select value={value} onValueChange={onChange} disabled={disabled || loading}>
             <SelectTrigger>
-                <SelectValue
-                    placeholder={loading
-                        ? 'Carregando...'
-                        : field.placeholder || `Selecione ${field.label.toLowerCase()}`
-                    }
-                />
+                <SelectValue placeholder={loading ? 'Carregando...' : placeholder} />
             </SelectTrigger>
             <SelectContent>
-                {options.map((option) => (
+                {selectOptions.map((option) => (
                     <SelectItem key={option.value} value={option.value}>
                         {option.label}
                     </SelectItem>
