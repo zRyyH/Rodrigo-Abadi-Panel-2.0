@@ -17,14 +17,15 @@ export default function InvoicesPage() {
             queryConfig={configs.query}
             columns={configs.columns}
             filterConfigs={configs.filters}
+            dataTransformer={dataTransformer}
             title="Nota Fiscal"
             icon={FileText}
-            createRoute="/invoices/create"
-            detailRoute="/invoices/{id}"
-            dataTransformer={dataTransformer}
-            deleteConfirmField="origin"
-            deleteConfirmMessage='Deseja deletar o produto "{origin}"?'
+            editRoute="/invoices/{id}"
+            deleteField="id"
+            deleteConfirmMessage="Deseja deletar {product_name}?"
+            removeAction={true}
             showImage={false}
+            editAction={true}
         />
     );
 }

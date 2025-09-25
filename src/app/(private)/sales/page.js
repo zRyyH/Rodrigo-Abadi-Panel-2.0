@@ -18,10 +18,8 @@ export default function salesPage() {
             filterConfigs={configs.filters}
             title="Venda"
             icon={FileText}
-            detailRoute="/sales/{id}"
+            detailRoute="/sales/{id}/info"
             dataTransformer={dataTransformer}
-            deleteConfirmField="sale_id"
-            deleteConfirmMessage='Deseja deletar a venda "{sale_id}"?'
             showImage={false}
         />
     );

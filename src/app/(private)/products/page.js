@@ -18,14 +18,16 @@ export default function ProductsPage() {
             queryConfig={configs.query}
             columns={configs.columns}
             filterConfigs={configs.filters}
+            dataTransformer={dataTransformer}
             title="Produto"
             icon={FileText}
-            createRoute="/products/create"
-            detailRoute="/products/{id}"
-            dataTransformer={dataTransformer}
-            deleteConfirmField="sku"
-            deleteConfirmMessage='Deseja deletar o produto "{sku}"?'
             showImage={true}
+            detailRoute="/products/{id}/metrics"
+            editRoute="products/{id}"
+            deleteField="id"
+            deleteConfirmMessage="Deseja deletar o usuário {sku}?"
+            removeAction={true}
+            editAction={true}
         />
     );
 }

@@ -19,10 +19,12 @@ export default function OriginsPage() {
             title="Origem"
             icon={FileText}
             createRoute="/origins/create"
-            detailRoute="/origins/{id}"
             dataTransformer={dataTransformer}
             deleteConfirmField="origin"
-            deleteConfirmMessage='Deseja deletar o produto "{origin}"?'
+            deleteConfirmMessage='Deseja deletar "{origin}"?'
+            editRoute="/origins/{id}"
+            editAction={true}
+            removeAction={true}
             showImage={false}
         />
     );

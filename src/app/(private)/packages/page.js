@@ -19,10 +19,12 @@ export default function PackagesPage() {
             title="Embalagem"
             icon={FileText}
             createRoute="/packages/create"
-            detailRoute="/packages/{id}"
             dataTransformer={dataTransformer}
             deleteConfirmField="type_of_packaging"
-            deleteConfirmMessage='Deseja deletar o produto "{type_of_packaging}"?'
+            deleteConfirmMessage='Deseja deletar "{type_of_packaging}"?'
+            editRoute="/packages/{id}"
+            editAction={true}
+            removeAction={true}
             showImage={false}
         />
     );

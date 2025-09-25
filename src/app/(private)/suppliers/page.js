@@ -19,10 +19,12 @@ export default function SuppliersPage() {
             title="Fornecedor"
             icon={FileText}
             createRoute="/suppliers/create"
-            detailRoute="/suppliers/{id}"
             dataTransformer={dataTransformer}
             deleteConfirmField="supplier_name"
-            deleteConfirmMessage='Deseja deletar o produto "{supplier_name}"?'
+            deleteConfirmMessage='Deseja deletar "{supplier_name}"?'
+            editRoute="/suppliers/{id}"
+            editAction={true}
+            removeAction={true}
             showImage={false}
         />
     );

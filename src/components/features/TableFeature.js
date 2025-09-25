@@ -3,7 +3,7 @@
 import SearchBar from "@/components/common/SearchBar";
 import Table from "@/components/common/Table";
 import { Button } from "@/components/ui/button";
-import { Trash2 } from "lucide-react";
+import { Trash2, Edit } from "lucide-react";
 import useDirectusTable from "@/hooks/useDirectusTable";
 import { useRouter } from "next/navigation";
 import DirectusBaseService from "@/services/base";
@@ -23,13 +23,15 @@ export default function TableFeature({
     icon: Icon,
     createRoute,
     detailRoute,
+    editRoute,
 
     // Transformações de dados
     dataTransformer = (data) => data,
 
-    // Configurações de ações
+    // Ações
+    editAction = false,
+    removeAction = false,
     deleteField = "id",
-    deleteConfirmField = "id",
     deleteConfirmMessage = "Deseja deletar este item?",
 
     // Customizações da tabela
@@ -44,7 +46,6 @@ export default function TableFeature({
 
     const {
         data,
-        loading,
         search,
         filters,
         setSearch,
@@ -88,15 +89,27 @@ export default function TableFeature({
             : deleteConfirmMessage;
     };
 
-    const actions = [
-        {
+    const actions = [];
+
+    if (editAction && editRoute) {
+        actions.push({
+            icon: <Edit className="w-4 h-4" />,
+            variant: 'ghost',
+            size: 'icon',
+            className: 'text-gray-400 hover:text-blue-600 hover:bg-blue-50 transition-colors',
+            onClick: (item) => router.push(editRoute.replace("{id}", item.id))
+        });
+    }
+
+    if (removeAction) {
+        actions.push({
             icon: <Trash2 className="w-4 h-4" />,
             variant: 'ghost',
             size: 'icon',
             className: 'text-gray-400 hover:text-red-600 hover:bg-red-50 transition-colors',
             onClick: handleDeleteClick
-        }
-    ];
+        });
+    }
 
     const handleRemoveFilter = (key) => {
         delete filters[key];
@@ -174,16 +187,18 @@ export default function TableFeature({
                 />
             </div>
 
-            <ConfirmModal
-                open={confirmOpen}
-                onOpenChange={setConfirmOpen}
-                title="Confirmar exclusão"
-                description={getConfirmMessage()}
-                confirmText="Deletar"
-                cancelText="Cancelar"
-                onConfirm={handleConfirmDelete}
-                variant="destructive"
-            />
+            {removeAction && (
+                <ConfirmModal
+                    open={confirmOpen}
+                    onOpenChange={setConfirmOpen}
+                    title="Confirmar exclusão"
+                    description={getConfirmMessage()}
+                    confirmText="Deletar"
+                    cancelText="Cancelar"
+                    onConfirm={handleConfirmDelete}
+                    variant="destructive"
+                />
+            )}
         </div>
     );
 }
