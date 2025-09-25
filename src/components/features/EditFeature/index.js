@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import useFormHook from '@/hooks/useFormHook';
 import { useFileUpload } from '@/hooks/useFileUpload';
+import { useNotification } from '@/contexts/NotificationContext';
 import DynamicForm from '@/components/common/DynamicForm';
 import ImageCarousel from '@/components/common/ImageCarousel';
 import { Button } from "@/components/ui/button";
@@ -28,6 +29,7 @@ export default function EditItemForm({
 }) {
     const router = useRouter();
     const params = useParams();
+    const { showSuccess, showError } = useNotification();
     const [mounted, setMounted] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -74,16 +76,25 @@ export default function EditItemForm({
             const savedItem = await saveForm();
 
             if (junctionCollection && junctionCollum) {
-                await create(savedItem.id, junctionCollum)
+                await create(savedItem.id, junctionCollum);
             }
 
             if (savedItem) {
+                showSuccess(
+                    'Sucesso',
+                    `${title} ${itemId ? 'atualizado' : 'criado'} com sucesso`
+                );
+
                 const path = redirectPath || `/${collection}`;
                 router.push(path);
             }
 
         } catch (err) {
             console.error('Erro ao salvar:', err);
+            showError(
+                'Erro ao salvar',
+                err.message || 'Não foi possível salvar as alterações'
+            );
         } finally {
             setIsSubmitting(false);
         }

@@ -8,6 +8,8 @@ import useDirectusTable from "@/hooks/useDirectusTable";
 import { useRouter } from "next/navigation";
 import DirectusBaseService from "@/services/base";
 import { useEffect, useState } from "react";
+import { ConfirmModal } from "@/components/common/ConfirmModal";
+import { useNotification } from "@/contexts/NotificationContext";
 
 export default function TableFeature({
     // Configurações da tabela
@@ -36,6 +38,9 @@ export default function TableFeature({
 }) {
     const router = useRouter();
     const [isVisible, setIsVisible] = useState(false);
+    const [confirmOpen, setConfirmOpen] = useState(false);
+    const [itemToDelete, setItemToDelete] = useState(null);
+    const { showSuccess, showError } = useNotification();
 
     const {
         data,
@@ -50,7 +55,6 @@ export default function TableFeature({
         meta
     } = useDirectusTable(collection, queryConfig);
 
-    // Ativa as animações após o componente montar
     useEffect(() => {
         const timer = setTimeout(() => setIsVisible(true), 50);
         return () => clearTimeout(timer);
@@ -58,52 +62,58 @@ export default function TableFeature({
 
     const transformedData = dataTransformer(data);
 
-    const handleDelete = async (item) => {
-        const confirmText = deleteConfirmMessage.includes("{")
-            ? deleteConfirmMessage.replace(/\{(\w+)\}/g, (match, key) => item[key] || match)
-            : deleteConfirmMessage;
+    const handleDeleteClick = (item) => {
+        setItemToDelete(item);
+        setConfirmOpen(true);
+    };
 
-        if (confirm(confirmText)) {
-            try {
-                const service = new DirectusBaseService(collection);
-                await service.deleteItem(item[deleteField]);
-                window.location.reload();
-            } catch (error) {
-                alert('Erro ao deletar o item');
-            }
+    const handleConfirmDelete = async () => {
+        if (!itemToDelete) return;
+
+        try {
+            const service = new DirectusBaseService(collection);
+            await service.deleteItem(itemToDelete[deleteField]);
+            showSuccess('Sucesso', 'Item deletado com sucesso');
+            window.location.reload();
+        } catch (error) {
+            showError('Erro', 'Erro ao deletar o item');
         }
+    };
+
+    const getConfirmMessage = () => {
+        if (!itemToDelete) return deleteConfirmMessage;
+
+        return deleteConfirmMessage.includes("{")
+            ? deleteConfirmMessage.replace(/\{(\w+)\}/g, (match, key) => itemToDelete[key] || match)
+            : deleteConfirmMessage;
     };
 
     const actions = [
         {
-            label: 'Deletar',
             icon: <Trash2 className="w-4 h-4" />,
-            variant: 'destructive',
-            onClick: handleDelete
+            variant: 'ghost',
+            size: 'icon',
+            className: 'text-gray-400 hover:text-red-600 hover:bg-red-50 transition-colors',
+            onClick: handleDeleteClick
         }
     ];
 
     const handleRemoveFilter = (key) => {
         delete filters[key];
         setFilters(filters);
-    }
+    };
 
     const handleRowClick = detailRoute
         ? (item) => router.push(detailRoute.replace("{id}", item.id))
         : undefined;
 
-    // CORREÇÃO: Função para lidar com mudanças de filtro
     const handleFilterChange = (key, value) => {
-
         const updatedFilters = { ...filters };
 
-        // Remove o filtro se o valor for null/undefined/vazio/array vazio
         if (value === null || value === undefined || value === '' ||
             (Array.isArray(value) && value.length === 0)) {
-            // Remove completamente a chave do objeto filters
             delete updatedFilters[key];
         } else {
-            // Define o novo valor
             updatedFilters[key] = value;
         }
 
@@ -137,7 +147,7 @@ export default function TableFeature({
                         onSearchChange={setSearch}
                         filterConfigs={filterConfigs}
                         selectedFilters={filters}
-                        onFilterChange={handleFilterChange} // Usar a função corrigida
+                        onFilterChange={handleFilterChange}
                         removeFilter={handleRemoveFilter}
                         onClearFilters={clearFilters}
                     />
@@ -163,6 +173,17 @@ export default function TableFeature({
                     showImage={showImage}
                 />
             </div>
+
+            <ConfirmModal
+                open={confirmOpen}
+                onOpenChange={setConfirmOpen}
+                title="Confirmar exclusão"
+                description={getConfirmMessage()}
+                confirmText="Deletar"
+                cancelText="Cancelar"
+                onConfirm={handleConfirmDelete}
+                variant="destructive"
+            />
         </div>
     );
 }
