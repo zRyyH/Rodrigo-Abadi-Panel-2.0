@@ -1,7 +1,6 @@
 "use client";
 
 import { DashboardMetric } from '@/components/features/DashboardMetric';
-import { buildProductCards } from '@/utils/transformers/productMetrics';
 import { DynamicBreadcrumb } from '@/components/common/DynamicBreadcrumb';
 
 export default function Dashboard() {
@@ -10,10 +9,9 @@ export default function Dashboard() {
             <DynamicBreadcrumb className="mb-6" />
 
             <DashboardMetric
-                endpoint="productDetails"
+                endpoint="products"
                 title="Métricas do Produto"
-                description="Visão geral do desempenho e status atual"
-                buildCards={buildProductCards}
+                description="Visão geral do desempenho"
             />
         </div>
     );

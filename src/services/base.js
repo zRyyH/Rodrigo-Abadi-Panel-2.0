@@ -1,6 +1,7 @@
+import { httpClientApi } from '@/libs/http-client';
 import { httpClient } from '@/libs/http-client';
 
-class DirectusBaseService {
+export class DirectusBaseService {
     constructor(collection) {
         this.collection = collection;
     }
@@ -49,16 +50,6 @@ class DirectusBaseService {
         }
     }
 
-    async deleteItems(options) {
-        try {
-            const params = this._buildParams(options);
-            await httpClient.delete(`items/${this.collection}`, { params });
-            return true;
-        } catch (error) {
-            throw new Error(`Erro ao deletar items: ${error.message}`);
-        }
-    }
-
     async uploadFiles(formData) {
         try {
             return await httpClient.post('files', formData, {
@@ -86,4 +77,30 @@ class DirectusBaseService {
     }
 }
 
-export default DirectusBaseService;
+export class ApiBaseService {
+    constructor(endpoint) {
+        this.endpoint = endpoint;
+    }
+
+    async readItem(path = '', params = {}) {
+        try {
+            const url = `${this.endpoint}/${path}`;
+            const response = await httpClientApi.get(url, { params });
+            return response.data.data
+        } catch (error) {
+            console.error(error);
+            throw new Error(`Erro ao fazer GET: ${error.message}`);
+        }
+    }
+
+    async uploadFiles(formData) {
+        try {
+            const response = await httpClientApi.post('upload', formData, {
+                headers: { 'Content-Type': 'multipart/form-data' }
+            });
+            return response
+        } catch (error) {
+            throw new Error(`Erro ao fazer upload: ${error.message}`);
+        }
+    }
+}

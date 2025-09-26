@@ -1,15 +1,14 @@
 export const configs = {
     query: {
-        searchFields: ['*'],
+        searchFields: ['sale_or_dispatch', 'invoice_number', 'total_amount', 'issue_date', 'status'],
     },
 
     columns: [
-        { key: 'invoice_number', label: 'Numero da nota' },
         { key: 'sale_or_dispatch', label: 'Numero da venda' },
+        { key: 'invoice_number', label: 'Numero da nota' },
+        { key: 'total_amount', label: 'Valor Total' },
         { key: 'issue_date', label: 'Data' },
         { key: 'status', label: 'Status' },
-        { key: 'sale_date', label: 'Data' },
-        { key: 'total_amount', label: 'Valor Total' },
     ],
 
     filters: [

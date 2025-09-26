@@ -1,6 +1,6 @@
 // useSearchBarFilters.js
 import { useState, useEffect, useMemo } from 'react'
-import DirectusBaseService from '@/services/base'
+import { DirectusBaseService } from '@/services/base'
 
 export const useSearchBarFilters = (filterConfigs) => {
     const [filters, setFilters] = useState([])

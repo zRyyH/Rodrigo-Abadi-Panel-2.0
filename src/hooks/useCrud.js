@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import DirectusBaseService from '@/services/base';
+import { DirectusBaseService } from '@/services/base';
 import { useAsyncRequest } from './useAsyncRequest';
 
 export const useCrud = (collection) => {

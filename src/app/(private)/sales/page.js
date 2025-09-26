@@ -3,11 +3,13 @@
 import TableFeature from "@/components/features/TableFeature";
 import { configs } from '@/constants/pages/sales';
 import { FileText } from "lucide-react";
+import { formatDate } from "@/utils/formatters";
 
 export default function salesPage() {
     const dataTransformer = (sales) =>
         sales.map(sale => ({
             ...sale,
+            sale_date: formatDate(sale.sale_date)
         }));
 
     return (

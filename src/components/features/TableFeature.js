@@ -6,35 +6,26 @@ import { Button } from "@/components/ui/button";
 import { Trash2, Edit } from "lucide-react";
 import useDirectusTable from "@/hooks/useDirectusTable";
 import { useRouter } from "next/navigation";
-import DirectusBaseService from "@/services/base";
+import { DirectusBaseService } from "@/services/base";
 import { useEffect, useState } from "react";
 import { ConfirmModal } from "@/components/common/ConfirmModal";
 import { useNotification } from "@/contexts/NotificationContext";
 
 export default function TableFeature({
-    // Configurações da tabela
     collection,
     queryConfig,
     columns,
     filterConfigs = [],
-
-    // Configurações da página
     title,
     icon: Icon,
     createRoute,
     detailRoute,
     editRoute,
-
-    // Transformações de dados
     dataTransformer = (data) => data,
-
-    // Ações
     editAction = false,
     removeAction = false,
     deleteField = "id",
     deleteConfirmMessage = "Deseja deletar este item?",
-
-    // Customizações da tabela
     showImage = false,
     itemsPerPage = 25
 }) {
@@ -134,7 +125,7 @@ export default function TableFeature({
     };
 
     return (
-        <div className="container mx-auto p-6 space-y-6">
+        <div className="w-full max-w-full p-6 space-y-6">
             <div
                 className={`bg-white rounded-lg shadow p-6 transition-all duration-500 ${isVisible
                     ? 'opacity-100 translate-y-0'
@@ -168,7 +159,7 @@ export default function TableFeature({
             </div>
 
             <div
-                className={`bg-white rounded-lg shadow transition-all duration-500 delay-100 ${isVisible
+                className={`bg-white rounded-lg shadow transition-all duration-500 delay-100 overflow-auto ${isVisible
                     ? 'opacity-100 translate-y-0'
                     : 'opacity-0 translate-y-4'
                     }`}

@@ -54,7 +54,7 @@ export default function UploadFiles() {
     const isFormValid = values.fileSales && values.fileInvoices;
 
     return (
-        <div className="max-w-2xl mx-auto p-6">
+        <div className="max-w-4xl mx-auto p-6">
             <DynamicBreadcrumb className="mb-6" />
             
             <Card className="animate-in slide-in-from-bottom-4 duration-500">

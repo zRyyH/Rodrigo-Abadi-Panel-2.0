@@ -4,14 +4,13 @@ export const configs = {
     },
 
     columns: [
+        { key: 'sale_id', label: 'Numero da venda' },
         { key: 'sku', label: 'SKU' },
         { key: 'listing_title', label: 'Nome do produto' },
-        { key: 'listing_id', label: 'Anúncio' },
         { key: 'buyer_name', label: 'Nome do comprador' },
-        { key: 'personal_or_company_data', label: 'Apelido do comprador' },
+        { key: 'listing_id', label: 'Anúncio' },
         { key: 'sale_date', label: 'Data' },
         { key: 'delivery_method', label: 'Tipo de envio' },
-        { key: 'sale_id', label: 'Numero da venda' },
     ],
 
     filters: [

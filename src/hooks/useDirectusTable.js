@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
-import DirectusBaseService from '../services/base.js';
+import { DirectusBaseService } from '../services/base.js';
 
 const useDirectusTable = (collection, config = {}) => {
     const {

@@ -109,7 +109,7 @@ export default function EditItemForm({
 
     return (
         <Card className={cn(
-            "animate-in slide-in-from-bottom-4 duration-500",
+            "animate-in slide-in-from-bottom-4 duration-500 max-w-full",
             className
         )}>
             <CardHeader>
@@ -128,24 +128,33 @@ export default function EditItemForm({
                     </Alert>
                 )}
 
-                <DynamicForm
-                    fields={fields}
-                    values={values}
-                    onChange={handleFieldChange}
-                />
-
-                {hasImages && junctionCollection && (
-                    <div className="space-y-2">
-                        <Label>Imagens</Label>
-                        <ImageCarousel
-                            images={files}
-                            onImagesChange={setFiles}
-                            deleteImage={remove}
-                            maxImages={maxImages}
-                            className="border rounded-lg p-4"
+                <div className={cn(
+                    "flex gap-8",
+                    hasImages && junctionCollection ? "flex-col lg:flex-row" : ""
+                )}>
+                    <div className={cn(
+                        hasImages && junctionCollection ? "lg:flex-[2] min-w-0" : "w-full"
+                    )}>
+                        <DynamicForm
+                            fields={fields}
+                            values={values}
+                            onChange={handleFieldChange}
                         />
                     </div>
-                )}
+
+                    {hasImages && junctionCollection && (
+                        <div className="lg:flex-1 space-y-2 min-w-0">
+                            <Label>Imagens</Label>
+                            <ImageCarousel
+                                images={files}
+                                onImagesChange={setFiles}
+                                deleteImage={remove}
+                                maxImages={maxImages}
+                                className="border rounded-lg p-4 h-full"
+                            />
+                        </div>
+                    )}
+                </div>
             </CardContent>
 
             <Separator />
