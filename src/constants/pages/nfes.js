@@ -1,6 +1,6 @@
 export const configs = {
     query: {
-        searchFields: ['sale_or_dispatch', 'invoice_number', 'total_amount', 'issue_date', 'status'],
+        searchFields: ['sale_or_dispatch', 'invoice_number', 'status'],
     },
 
     columns: [
