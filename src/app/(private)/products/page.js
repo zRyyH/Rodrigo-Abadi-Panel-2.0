@@ -1,8 +1,8 @@
 "use client";
 
 import TableFeature from "@/components/features/TableFeature";
-import { formatCurrency } from "aqvs/utils_formatters";
 import { configs } from '@/constants/pages/products';
+import { formatCurrency } from "@/utils/formatters";
 import { FileText } from "lucide-react";
 
 export default function ProductsPage() {
