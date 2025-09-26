@@ -11,7 +11,7 @@ export default function ProductsPage() {
             ...product,
             supplier_id: product.supplier_id?.supplier_name,
             package_id: product.package_id?.type_of_packaging,
-            purchase_cost: formatCurrency(purchase_cost)
+            purchase_cost: formatCurrency(product.purchase_cost)
         }));
 
     return (
