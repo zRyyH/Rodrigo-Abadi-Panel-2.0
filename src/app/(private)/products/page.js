@@ -1,6 +1,7 @@
 "use client";
 
 import TableFeature from "@/components/features/TableFeature";
+import { formatCurrency } from "aqvs/utils_formatters";
 import { configs } from '@/constants/pages/products';
 import { FileText } from "lucide-react";
 
@@ -9,7 +10,8 @@ export default function ProductsPage() {
         products.map(product => ({
             ...product,
             supplier_id: product.supplier_id?.supplier_name,
-            package_id: product.package_id?.type_of_packaging
+            package_id: product.package_id?.type_of_packaging,
+            purchase_cost: formatCurrency(purchase_cost)
         }));
 
     return (
